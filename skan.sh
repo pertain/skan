@@ -16,7 +16,7 @@
 # TO DO:
 #	1. allow user to crop existing image without scanning
 #	2. add loop so user can scan several images in one session
-#	3. chage 'show' option to:
+#	3. change 'show' option to:
 #			--show <val> (-s <val>):	opens cropped image with <val>
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +50,7 @@
 #
 #		example:	skan.sh file -s
 #
-#	Display Scan Settings:
+#	Show Settings:
 #		--verbose (-v):	prints values used for scan & crop
 #
 #		example:	skan.sh file -s
@@ -83,10 +83,10 @@ skan(){
 	# set values for scan resolution
 	case "$resolution" in
 		300)
-			shave_val=30x30
+			shave_val='30x30'
 			;;
 		150)
-			shave_val=15x15
+			shave_val='15x15'
 			;;
 	esac
 
@@ -111,19 +111,19 @@ krop(){
 	# set values for image type
 	case "$img_type" in
 		document)
-			fx_escapes=%[fx:w+20]x%[fx:h+20]+%[fx:page.x-10]+%[fx:page.y-10]
-			fuzz_val=10%
+			fx_escapes='%[fx:w+20]x%[fx:h+20]+%[fx:page.x-10]+%[fx:page.y-10]'
+			fuzz_val='10%'
 			;;
 		photo)
-			fx_escapes=%[fx:w]x%[fx:h]+%[fx:page.x]+%[fx:page.y]
+			fx_escapes='%[fx:w]x%[fx:h]+%[fx:page.x]+%[fx:page.y]'
 
 			# set values for image img_tone
 			case "$img_tone" in
 				dark)
-					fuzz_val=60%
+					fuzz_val='60%'
 					;;
 				light)
-					fuzz_val=50%
+					fuzz_val='50%'
 					;;
 			esac
 			;;
@@ -146,7 +146,7 @@ krop(){
 
 
 # user included no arguments (filename is required)
-if [ $# -lt 1 ]
+if [ "$#" -lt 1 ]
 then
 	printf "\nMissing Filename\n\n"
 	printf "\nUsage: %s <filename> <opt1> <opt2> <opt3> <opt4> <opt5> <opt6>\n\n" "$0"
@@ -154,7 +154,7 @@ then
 fi
 
 # user included too many arguments
-if [ $# -gt 6 ]
+if [ "$#" -gt 6 ]
 then
 	printf "\nToo many arguments\n\n"
 	printf "\nUsage: %s <filename> <opt1> <opt2> <opt3> <opt4> <opt5> <opt6>\n\n" "$0"
@@ -241,4 +241,3 @@ if [ "$SHOW" = true ]
 then
 	photoqt "$FILENAME".png &
 fi
-
