@@ -19,7 +19,7 @@
 #	3. change 'show' option to:
 #			--show <val> (-s <val>):	opens cropped image with <val>
 #
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Usage: skan.sh <filename> <opt1> <opt2> <opt3> <opt4> <opt5> <opt6>
 #
 # Options:
@@ -54,7 +54,12 @@
 #		--verbose (-v):	prints values used for scan & crop
 #
 #		example:	skan.sh file -s
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#	Manual Crop:
+#		--manual (-m): scans image then opens in Gimp for manual cropping
+#
+#		example:	skan.sh file -m
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # scanning function
@@ -154,7 +159,7 @@ then
 fi
 
 # user included too many arguments
-if [ "$#" -gt 6 ]
+if [ "$#" -gt 7 ]
 then
 	printf "\nToo many arguments\n\n"
 	printf "\nUsage: %s <filename> <opt1> <opt2> <opt3> <opt4> <opt5> <opt6>\n\n" "$0"
@@ -176,6 +181,7 @@ SCANTYPE=document
 BRIGHTNESS=light
 DPI=150
 SHOW=false
+MAN_CROP=false
 
 # parse/store positional args
 while [ "$2" != "" ]
@@ -184,7 +190,7 @@ do
 		-d|--document)
 			SCANTYPE=document
 			DPI=150
-			shift; shift; shift; shift; shift
+			shift; shift; shift; shift; shift; shift
 			;;
 		-p|--photo)
 			SCANTYPE=photo
@@ -216,6 +222,10 @@ do
 			printf "Image Tone:  %s\n" "$BRIGHTNESS"
 			printf "Resolution:  %s dpi\n" "$DPI"
 			;;
+		-m|--manual)
+			MAN_CROP=true
+			SHOW=false
+			;;
 		*)
 			printf "\nInvalid Argument\n\n"
 			printf "\nUsage: %s <filename> <opt1> <opt2> <opt3> <opt4> <opt5> <opt6>\n\n" "$0"
@@ -226,7 +236,8 @@ do
 			printf "\t-dk | --dark\n"
 			printf "\t-r  | --resolution <dpi>> (150 OR 300)\n"
 			printf "\t-s  | --show\n"
-			printf "\t-v  | --verbose\n\n"
+			printf "\t-v  | --verbose\n"
+			printf "\t-m  | --manual\n\n"
 			exit 1
 			;;
 	esac
@@ -235,7 +246,12 @@ done
 
 # call scanner & auto-crop functions
 skan "$FILENAME" "$SCANTYPE" "$DPI"
-krop "$FILENAME" "$SCANTYPE" "$BRIGHTNESS"
+if [ "$MAN_CROP" = false ]
+then
+	krop "$FILENAME" "$SCANTYPE" "$BRIGHTNESS"
+else
+	gimp "$FILENAME"_temp.png &
+fi
 
 if [ "$SHOW" = true ]
 then
