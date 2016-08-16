@@ -26,11 +26,11 @@
 #
 #   Document Type:
 #       --document  (-d):   color = b&w, dpi = 150, tone = light
-#       --photo (-p):   color = color
+#       --photo     (-p):   color = color
 #
 #       example:    skan.sh file -p
 #
-#   == Remaining options take effect with 'photo' document type ==
+#   === Remaining options take effect with 'photo' document type ===
 #
 #   Image Tone:
 #       --light (-lt):  tone = light
